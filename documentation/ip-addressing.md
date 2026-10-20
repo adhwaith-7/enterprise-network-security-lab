@@ -64,3 +64,105 @@ The ISP connects to a simulated external network.
 |---|---|---|---|---|
 | ISP | G0/1 | 192.0.2.1 | 255.255.255.0 | — |
 | Internet Server | NIC | 192.0.2.10 | 255.255.255.0 | 192.0.2.1 |
+
+Network:
+```
+192.0.2.0/24
+```
+The 192.0.2.0/24 network is used as a documentation/test network to represent the simulated Internet in the Packet Tracer environment.
+
+### DHCP Address Allocation
+
+R1 acts as the DHCP server for the client VLANs.
+The following address ranges are reserved:
+```
+192.168.10.1 - 192.168.10.20
+192.168.20.1 - 192.168.20.20
+192.168.30.1 - 192.168.30.20
+```
+Dynamic client addresses are therefore allocated from the remaining address space.
+
+#### VLAN 10 
+```
+Network:       192.168.10.0/24
+Gateway:       192.168.10.1
+DHCP range:    192.168.10.21+
+DNS:           192.168.20.2
+```
+#### VLAN 20
+```
+Network:       192.168.20.0/24
+Gateway:       192.168.20.1
+DHCP range:    192.168.20.21+
+DNS:           192.168.20.2
+```
+#### VLAN 30
+```
+Network:       192.168.30.0/24
+Gateway:       192.168.30.1
+DHCP range:    192.168.30.21+
+DNS:           192.168.20.2
+```
+### Static Addressing 
+
+Infrastructure and service devices use static IP addresses.
+
+Static addressing is used for:
+- Router interfaces
+- Switch management interface
+- Internal server
+- DMZ server
+- Management PC
+- ISP interfaces
+- Internet server
+
+This ensures that critical infrastructure and services remain reachable at predictable addresses.
+
+### NAT Addressing 
+
+Internal private networks use PAT when accessing the simulated Internet.
+
+Translated internal networks:
+```
+192.168.10.0/24
+192.168.20.0/24
+192.168.30.0/24
+192.168.40.0/24
+```
+The R1 WAN interface is used as the PAT address:
+```
+10.0.0.1
+```
+### DMZ Static NAT 
+
+The DMZ web server uses:
+```
+Inside local:
+192.168.40.2:80
+```
+It is published externally through:
+```
+Inside global:
+10.0.0.1:80
+```
+This allows HTTP traffic from the simulated external network to reach the DMZ web server.
+
+### Addressing Design Principles
+
+The addressing plan follows these principles:
+- Separate subnet for each security zone
+- Dedicated management network
+- Static addressing for infrastructure
+- DHCP for normal client systems
+- Reserved address space for gateways and infrastructure
+- /30 subnet for the point-to-point WAN connection
+- Separate external test network
+- Predictable addressing for troubleshooting
+
+### Summary
+
+The addressing plan provides clear separation between users, servers, guests, DMZ systems, and management devices.
+
+The structured addressing scheme also makes troubleshooting easier because the VLAN and security zone can be identified directly from an IP address.
+
+
