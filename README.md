@@ -59,3 +59,13 @@ The network consists of:
                        Management
                            |
                     Management PC
+
+VLAN Design
+
+|  VLAN  | Purpose  |     Network     | Gateway      |
+|---|---|---|---|
+| 10 |   Employees  | 192.168.10.0/24 | 192.168.10.1 |
+| 20 |   Servers    | 192.168.20.0/24 | 192.168.20.1 |
+| 30 |   Guest      | 192.168.30.0/24 | 192.168.30.1 |
+| 40 |   DMZ        | 192.168.40.0/24 | 192.168.40.1 |
+| 99 |   Management | 192.168.99.0/24 | 192.168.99.1 |
