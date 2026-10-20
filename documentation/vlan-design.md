@@ -201,6 +201,7 @@ The switch uses access ports for endpoint devices.
 ###  VLAN Isolation 
 
 The VLAN architecture provides logical separation:
+```
                  R1
                  |
              802.1Q Trunk
@@ -219,8 +220,57 @@ Employees     Servers       Guest
                  │
               VLAN 99
             Management
+```
 Devices within the same VLAN can communicate at Layer 2 according to normal switching behavior.
 Communication between different VLANs must pass through R1.
 This allows security policies to be enforced at the routing boundary.
+
+### Security Segmentation Matrix 
+ | Source | Destination | Policy |
+|---|---|---|
+| Employees | Servers | Allowed |
+| Employees | Internet | Allowed |
+| Guest | Servers | Denied |
+| Guest | Internet | Allowed |
+| DMZ | Employees | Denied |
+| DMZ | Servers | Denied |
+| DMZ | Internet | Allowed |
+| Management | R1 | SSH Allowed |
+| Management | SW1 | SSH Allowed |
+
+### Why VLAN Segmentation Was Used 
+
+Without VLAN segmentation, all devices would share the same Layer 2 broadcast domain.
+
+Separating the network into VLANs provides:
+- Smaller broadcast domains
+- Logical separation of network roles
+- Better security boundaries
+- Easier access-control implementation
+- Easier troubleshooting
+- Dedicated management infrastructure
+- A foundation for enterprise network security
+
+#### Validation 
+
+The VLAN configuration was validated through:
+```
+show vlan brief
+```
+The trunk was validated through:
+```
+show interfaces trunk
+```
+Inter-VLAN connectivity was tested using ICMP.
+
+Security policies were validated using connectivity tests between Guest, DMZ, Server, Employee, and Management networks.
+
+### Summary 
+
+The VLAN architecture forms the foundation of the project's security model.
+Rather than treating the network as a single flat LAN, each functional area is placed into a separate logical security zone.
+Routing and ACLs are then used to control communication between these zones.
+
+
 
 
