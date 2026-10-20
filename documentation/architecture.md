@@ -78,3 +78,9 @@ Each VLAN is assigned its own subinterface and gateway.
 The physical G0/0 interface operates as the trunk connection to SW1.
 
 ## Switch Architecture
+
+SW1 provides Layer 2 connectivity between endpoint devices and R1.
+Access ports are assigned to the appropriate VLAN based on the role of the connected device.
+The R1-facing GigabitEthernet interface operates as an 802.1Q trunk.
+
+### Access VLANs
