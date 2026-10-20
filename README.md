@@ -59,9 +59,9 @@ The network consists of:
                        Management
                            |
                     Management PC
-
+```
 ## VLAN Design
-
+```
 |  VLAN  |   Purpose    |     Network     | Gateway      |
 |--------|--------------|-----------------|--------------|
 |   10   |   Employees  | 192.168.10.0/24 | 192.168.10.1 |
@@ -69,4 +69,39 @@ The network consists of:
 |   30   |   Guest      | 192.168.30.0/24 | 192.168.30.1 |
 |   40   |   DMZ        | 192.168.40.0/24 | 192.168.40.1 |
 |   99   |   Management | 192.168.99.0/24 | 192.168.99.1 |
+```
+## WAN
+```
+|       Device      | Interface |    Address    |
+|-------------------|-----------|---------------|
+|         R1        |    G0/1   | 10.0.0.1/30   |
+|         ISP       |    G0/0   | 10.0.0.2/30   |
+|         ISP       |    G0/1   | 192.0.2.1/24  |
+|   Internet Server |    NIC    | 192.0.2.10/24 |
+```
+## Network Services 
+
+DHCP
+
+R1 provides DHCP services for:
+- VLAN 10
+- VLAN 20
+- VLAN 30
+Addresses .1 through .20 are reserved for infrastructure/static devices.
+
+DNS
+
+The internal DNS server is:
+192.168.20.2
+Example DNS record:
+server.company.local → 192.168.20.2
+
+HTTP
+
+HTTP services are provided by:
+Server0
+192.168.20.2
+and the DMZ web server:
+DMZ Server
+192.168.40.2
 
