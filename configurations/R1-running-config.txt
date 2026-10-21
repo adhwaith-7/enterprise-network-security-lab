@@ -1,0 +1,22 @@
+Building configuration...
+
+Current configuration : 2758 bytes
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+!
+!
+enable secret 5 $1$mERr$yfos09gIcTNv76aJ.OQ/P.
+!
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.20
+ip dhcp excluded-address 192.168.20.1 192.168.20.20
+ip dhcp excluded-address 192.168.30.1 192.168.30.20
+!
+ip dhcp pool VLAN20-DHCP
+ network 192.168.20.0 255.255.255.0
