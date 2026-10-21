@@ -183,6 +183,166 @@ transport input ssh
 ```
 Telnet is therefore not accepted on the configured VTY lines.
 
+## SSH Access Restriction
+
+SSH access is restricted to the Management VLAN using a standard access list.
+```
+ip access-list standard MGMT-SSH
+ permit 192.168.99.0 0.0.0.255
+ deny any
+```
+The ACL is applied to the VTY lines:
+```
+access-class MGMT-SSH in
+```
+Result
+```
+Management VLAN → R1 SSH     ALLOWED
+Management VLAN → SW1 SSH    ALLOWED
+Other networks → SSH          RESTRICTED
+```
+This reduces the exposure of network-device management services.
+
+## Switch Port Security
+
+Port security is enabled on access ports.
+
+Configuration characteristics:
+```
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+```
+Configuration
+- Maximum MAC addresses: 1
+- Sticky MAC learning: Enabled
+- Violation mode: Restrict
+
+Sticky MAC learning allows the switch to dynamically learn the expected device MAC address.
+If an unauthorized MAC address appears, restrict mode drops the violating frames while keeping the interface operational.
+
+## Unused Port Shutdown
+
+Unused switch ports are administratively disabled.
+
+Configured unused ports include:
+```
+FastEthernet 0/8 - 24
+GigabitEthernet 0/2
+```
+The ports were assigned a descriptive label:
+```
+description UNUSED_DISABLED
+```
+This reduces the possibility of unauthorized devices being connected to unused physical interfaces.
+
+## Secure Device Credentials 
+
+Administrative access uses locally configured credentials and privileged EXEC secrets.
+
+R1 and SW1 use:
+```
+enable secret
+```
+and local user authentication:
+```
+username admin privilege 15 secret
+```
+Password encryption is also enabled on SW1:
+```
+service password-encryption
+```
+## Default Route and Controlled Internet Access 
+
+R1 uses a default route toward the simulated ISP:
+```
+ip route 0.0.0.0 0.0.0.0 10.0.0.2
+```
+This provides a controlled path from internal networks toward the simulated Internet.
+The combination of routing, NAT, and ACL policies determines which networks can access external resources.
+
+## Security Policy Summary 
+
+| Source | Destination | Result |
+|---|---|---|
+| Employees | Servers | Allowed |
+| Employees | Internet | Allowed |
+| Guest | Servers | Blocked |
+| Guest | Internet | Allowed |
+| DMZ | Employees | Blocked |
+| DMZ | Servers | Blocked |
+| DMZ | Internet | Allowed |
+| Management | R1 SSH | Allowed |
+| Management | SW1 SSH | Allowed |
+| Other networks | R1/SW1 SSH | Restricted |
+
+## Security Validation 
+
+The implemented controls were tested through deliberate connectivity tests.
+
+#### Guest Isolation 
+```
+Guest PC → Server0
+```
+Expected:
+```
+BLOCKED
+```
+#### Guest Internet Access 
+```
+Guest PC → Internet Server
+```
+Expected:
+```
+ALLOWED
+```
+#### DMZ Isolation 
+```
+DMZ Server → Server0
+```
+Expected:
+```
+BLOCKED
+```
+#### DMZ Internet Access 
+```
+DMZ Server → Internet Server
+```
+Expected:
+```
+ALLOWED
+```
+#### Management Access 
+```
+Management PC → SW1 SSH
+Management PC → R1 SSH
+```
+Expected:
+```
+ALLOWED
+```
+#### Security Design Principles
+The implementation demonstrates several practical security principles:
+#### Segmentation
+Separate network zones limit unnecessary communication.
+#### Least Privilege 
+Traffic between security zones is permitted only where required.
+#### Management Isolation 
+Network-device administration is separated from normal user traffic.
+#### Defense in Depth 
+Multiple controls are used together rather than relying on a single security mechanism.
+#### Reduced Attack Surface 
+Unused switch ports are disabled and device management is restricted to SSH and the Management VLAN.
+#### Controlled Exposure 
+The DMZ allows externally accessible services while protecting internal networks from direct DMZ access.
+
+#### Summary 
+
+The security architecture combines Layer 2 segmentation, Layer 3 access control, NAT, DMZ isolation, secure management, and switch-level protection.
+The controls were not only configured but also validated through connectivity testing and deliberate failure scenarios.
+
+
 
 
 
