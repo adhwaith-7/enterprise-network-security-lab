@@ -61,7 +61,7 @@ The network consists of:
                     Management PC
 ```
 ## VLAN Design
-```
+
 |  VLAN  |   Purpose    |     Network     | Gateway      |
 |--------|--------------|-----------------|--------------|
 |   10   |   Employees  | 192.168.10.0/24 | 192.168.10.1 |
@@ -69,16 +69,16 @@ The network consists of:
 |   30   |   Guest      | 192.168.30.0/24 | 192.168.30.1 |
 |   40   |   DMZ        | 192.168.40.0/24 | 192.168.40.1 |
 |   99   |   Management | 192.168.99.0/24 | 192.168.99.1 |
-```
+
 ## WAN
-```
+
 |       Device      | Interface |    Address    |
 |-------------------|-----------|---------------|
 |         R1        |    G0/1   | 10.0.0.1/30   |
 |         ISP       |    G0/0   | 10.0.0.2/30   |
 |         ISP       |    G0/1   | 192.0.2.1/24  |
 |   Internet Server |    NIC    | 192.0.2.10/24 |
-```
+
 ## Network Services 
 
 #### DHCP
@@ -285,7 +285,7 @@ Internet connectivity was verified again.
 ## Verification
 
 The following security and connectivity tests were successfully performed:
-```
+
 |          Test           | Expected Result |
 |-------------------------|-----------------|
 | Guest → Server VLAN     |      BLOCKED    |
@@ -294,7 +294,7 @@ The following security and connectivity tests were successfully performed:
 | DMZ → Internet          |      ALLOWED    |
 | Management PC → SW1 SSH |      ALLOWED    |
 | Management PC → R1 SSH  |      ALLOWED    |
-```
+
 ## Technologies Used 
 ```
 -- Cisco Packet Tracer
