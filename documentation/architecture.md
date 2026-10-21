@@ -66,7 +66,7 @@ R1 → ISP → Internet Server
 R1 performs inter-VLAN routing using subinterfaces on GigabitEthernet0/0.
 
 Each VLAN is assigned its own subinterface and gateway.
-```
+
 | Interface | VLAN |   Gateway    |
 |-----------|------|--------------|
 |  G0/0.10  |  10  | 192.168.10.1 |
@@ -74,7 +74,7 @@ Each VLAN is assigned its own subinterface and gateway.
 |  G0/0.30  |  30  | 192.168.30.1 |
 |  G0/0.40  |  40  | 192.168.40.1 |
 |  G0/0.99  |  99  | 192.168.99.1 |
-```
+
 The physical G0/0 interface operates as the trunk connection to SW1.
 
 ## Switch Architecture
