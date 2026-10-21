@@ -81,7 +81,7 @@ The network consists of:
 ```
 ## Network Services 
 
-DHCP
+#### DHCP
 
 R1 provides DHCP services for:
 - VLAN 10
@@ -89,13 +89,13 @@ R1 provides DHCP services for:
 - VLAN 30
 Addresses .1 through .20 are reserved for infrastructure/static devices.
 
-DNS
+#### DNS
 
 The internal DNS server is:
 192.168.20.2
 Example DNS record:server.company.local → 192.168.20.2
 
-HTTP
+#### HTTP
 
 HTTP services are provided by:
 Server0
@@ -106,7 +106,7 @@ DMZ Server
 
 ## Security Controls
 
- VLAN Segmentation
+#### VLAN Segmentation
 Different network roles are isolated using separate VLANs.
 
 VLAN 10 → Employees
@@ -117,7 +117,7 @@ VLAN 99 → Management
 
 This reduces the broadcast domain and provides a foundation for access-control policies.
 
-Guest Network Isolation
+#### Guest Network Isolation
 Guests are prevented from accessing the internal server network.
 
 Policy:
@@ -128,7 +128,7 @@ ACL:
 deny ip 192.168.30.0 0.0.0.255 192.168.20.0 0.0.0.255
 permit ip any any
 
-DMZ Isolation
+#### DMZ Isolation
 The DMZ is separated from internal networks.
 
 Policy:
@@ -137,27 +137,29 @@ DMZ → Server VLAN       DENY
 DMZ → Internet          ALLOW
 This demonstrates the basic security principle of placing externally accessible services into a controlled network segment.
 
-NAT/PAT
+#### NAT/PAT
 Private internal addresses are translated through R1 before accessing the simulated Internet.
 
 PAT uses the R1 WAN interface:
 10.0.0.1
 
 Internal networks:
+```
 192.168.10.0/24
 192.168.20.0/24
 192.168.30.0/24
 192.168.40.0/24
-
-DMZ Static NAT
+```
+#### DMZ Static NAT
 The DMZ web server is published through R1 using static NAT
-
+```
 192.168.40.2:80
         ↓
 10.0.0.1:80
+```
 This allows the simulated external network to access the DMZ HTTP service without exposing the internal server VLAN.
 
-SSH Management Security
+#### SSH Management Security
 Network-device management is restricted to VLAN 99.
 
 Management network:
@@ -167,7 +169,7 @@ R1
 SW1
 Telnet is disabled.
 
-Switch Port Security
+#### Switch Port Security
 Port security was configured on access ports using:
 
 Maximum MAC addresses: 1
@@ -202,7 +204,7 @@ DOCUMENT
 
 Seven failures were deliberately introduced and resolved.
 
-01 — DNS Failure
+#### 01 — DNS Failure
 
 Cause:
 Incorrect DNS server configuration.
@@ -211,7 +213,7 @@ Verification:
 ping server.company.local
 Direct IP connectivity remained functional, proving the network path was operational.
 
-02 — DHCP Failure
+#### 02 — DHCP Failure
 
 Cause:
 VLAN 10 DHCP pool was removed.
@@ -221,7 +223,7 @@ Result:
 Clients failed to obtain an IP address after forcing a new DHCP request.
 The DHCP pool was restored and connectivity verified.
 
-03 — VLAN/Trunk Failure
+#### 03 — VLAN/Trunk Failure
 
 Cause:
 The switch-to-router interface was changed from trunk mode to access mode.
@@ -232,14 +234,14 @@ show interfaces trunk
 No active trunk was displayed.
 The interface was restored to trunk mode.
 
-04 — ACL Failure
+#### 04 — ACL Failure
 
 Cause:
 An incorrect ACL rule was introduced.
 This demonstrated the importance of ACL processing order because ACL entries are evaluated using first-match logic.
 The incorrect rule was removed and the intended security policy restored.
 
-05 — NAT Failure
+#### 05 — NAT Failure
 
 Cause:
 The PAT rule was deliberately removed.
@@ -252,7 +254,7 @@ show running-config | include ip nat
 show ip nat translations
 PAT was restored and connectivity returned.
 
-06 — Port Security Failure
+#### 06 — Port Security Failure
 
 Cause:
 A different MAC address was connected to a protected switch port.
@@ -264,7 +266,7 @@ Verification:
 show port-security interface fa0/1
 The violation was identified and the original topology restored.
 
-07 — Default Gateway / Routing Failure
+#### 07 — Default Gateway / Routing Failure
 
 Cause:
 The default route on R1 was removed.
